@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock paper scissor</title>
+  <style>
+
+    body{
+      padding: auto;
+      text-align: center;
+      
+    }
+    button{
+      margin: 10px;
+      padding: 10px;
+      font-weight: 500;
+      font-size: 20px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    p{
+      font-size: 2rem;
+      margin: 0.5rem;
+    }
+    img{
+      height: 10rem;
+      width: 10rem;
+      object-fit: contain;
+      padding: 0;
+      border-radius: 5rem;
+      border: 2px solid blue;
+    }
+    img:hover{
+      background-color: #6eeb56;
+    }
+
+    .statusimg{
+      border-radius: 5px;
+    }
+
+    .resetbtn{
+      border: 1px solid black;
+      background-color: rgb(228, 92, 92);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <p>Rock Paper Scissor</p>
+  <p>Choose your move</p>
+
+
+  <!-- rock  -->
+  <button onclick="
+
+    playGame('Rock')
+  
+  "><img src="img/rock.png" alt="rock"></button>
+
+
+  <!-- paper  -->
+  <button onclick="
+
+playGame('paper')
+  "><img src="img/paper.png" alt="rock"></button>
+
+
+  <!-- scissor  -->
+  <button onclick="
+  
+   playGame('scissor')
+  
+ 
+  
+  
+  "><img src="img/scissor.png" alt="rock"></button>
+
+<p class="status">Status</p>
+<img class="statusimg" src="" alt="">  
+<p class="moves">Moves</p>
+<p class="scores">Scores</p>
+
+ <button class="resetbtn" onclick="resetScore()"
+  
+  >RESET</button>
+   
+  <script>
+
+
+    let score =  JSON.parse(localStorage.getItem('score'));
+
+    if (!score) {
+      score = {
+        tie : 0,
+        win : 0,
+        loss : 0
+      };
+    }
+
+    
+    function resetScore() {
+      score.tie = 0;
+      score.win = 0;
+      score.loss = 0;
+      localStorage.removeItem('score');
+      gameStatus();
+
+    }
+
+   
+    // let computerMove = '';
+    function playGame(playerMove){
+      let computerMove = pickComputerMove()
+
+
+
+      result = '';
+
+      if(playerMove === 'scissor'){
+        if (computerMove === 'Rock'){
+        result = 'you lose';
+        statuspicLose();
+        
+      }else if (computerMove === 'paper'){
+        result = 'you win';
+        statuspicWin();
+      }else if (computerMove === 'scissor'){
+        result = 'tie';
+        statuspicTie();
+      }
+      }
+
+      if(playerMove === 'paper'){
+        if (computerMove === 'Rock'){
+        result = 'you win';
+        statuspicWin();
+      }else if (computerMove === 'paper'){
+        result = 'tie';
+        statuspicTie();
+      }else if (computerMove === 'scissor'){
+        result = 'you lose';
+        statuspicLose();
+      }
+      }
+
+      if(playerMove === 'Rock'){
+        if (computerMove === 'Rock'){
+        result = 'tie';
+        statuspicTie();
+      }else if (computerMove === 'paper'){
+        result = 'you lose';
+        statuspicLose();
+      }else if (computerMove === 'scissor'){
+        result = 'you win';
+        statuspicWin();
+      }
+      }
+
+      if (result === 'tie' ){
+        score.tie += 1;
+      }else if (result === 'you win' ){
+        score.win += 1;
+      } else if (result === 'you lose' ){
+        score.loss += 1;
+      };
+      localStorage.setItem('score', JSON.stringify(score));
+
+      
+      
+    // console.log(score);
+      // alert(`you : ${playerMove} , Computer : ${computerMove} ,  ${result}
+      // Score = win : ${score.win}, loss : ${score.loss}, tie : ${score.tie}
+      // `);
+
+      
+      gameStatus(playerMove);
+
+      return playerMove;
+    }
+
+    function gameStatus(playerMove){
+      
+      // localStorage.getItem('score');
+
+      document.querySelector('.status').innerHTML=`${result}`;
+      
+
+      document.querySelector('.moves').innerHTML=`you : ${playerMove} , Computer : ${computerMove}`;
+
+
+      document.querySelector('.scores').innerHTML=`Score = win : ${score.win}, loss : ${score.loss}, tie : ${score.tie}`;
+
+      // resetScore();
+    }
+    
+    function statuspicWin(){
+      document.querySelector(".statusimg").src = "img/win.png";
+    }
+    function statuspicLose(){
+      document.querySelector(".statusimg").src = "img/fail.png";
+    }
+    function statuspicTie(){
+      document.querySelector(".statusimg").src = "img/tie.png";
+    }
+
+    function pickComputerMove (){
+      
+    let randomNumber = Math.random();
+    
+    
+    if(randomNumber >= 0 && randomNumber < 1/3){
+        computerMove = 'Rock';
+    }else if(randomNumber >= 1/3 && randomNumber < 2/3){
+          computerMove = 'paper';
+    }else if(randomNumber >= 2/3 && randomNumber < 1) {
+      computerMove = 'scissor';
+    };
+     return computerMove;
+    }
+
+  </script>
+</body>
+</html>
